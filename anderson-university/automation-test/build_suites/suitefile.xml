@@ -1,0 +1,15 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+
+<suite name="build_suite" parallel="methods" thread-count="4" configfailurepolicy="continue" >
+    <test verbose="2"  name="all_tests">
+        <parameter name="environment" value="dev" />
+        <groups>
+            <run>
+                <include name="servicetest.*" />
+            </run>
+        </groups>
+        <packages>
+            <package name="com.inin.testing.testservice.*" />
+        </packages>
+    </test>
+</suite>

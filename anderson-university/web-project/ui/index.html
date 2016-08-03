@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Anderson University Test Project</title>
+
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <!--jquery-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <!--Knockout js-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.3.0/knockout-min.js" type="text/javascript"></script>
+    <!--viewmodel js-->
+    <script data-main="javascript/main" src="viewModel.js"></script>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css" integrity="sha384-aUGj/X2zp5rLCbBxumKTCw2Z50WgIr1vs/PFN4praOTvYXWlVyh2UtNUU0KAUhAX" crossorigin="anonymous">
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<!-- banner-->
+    <div class="container-fluid" id="banner">
+        <div class="row" align="center">
+            <img src="images/banner.jpg" class="img-responsive">
+        </div>
+    </div>
+
+    <!--navigation bar-->
+    <nav class="navbar navbar-default" role="navigation" id="parentNav">
+        <div class="container" id="navContainer">
+            <!-- left-hand side-->
+            <div class="navbar-header" id="leftNav">
+                <ul class="nav navbar-nav"><li>
+                    <a class="navbar-brand" data-t="anderson-university-project-header">Anderson University Project</a>
+                </li></ul>
+            </div>
+
+            <!-- right-hand side-->
+            <ul class="nav navbar-nav navbar-right" id="rightNav">
+                <li> <a id="aboutButton" class="navbar-brand nav_boldable" data-bind="click: displayHealthCheckModal" data-t="about-button" href="#">about</a></li>
+            </ul>
+        </div>
+    </nav>
+    <!-- end nav bar -->
+
+    <!--user list-->
+    <div class="maintable">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th class="col-md-3" data-t="UserName">User Name</th>
+                    <th class="col-md-3" data-t="Role">Role</th>
+                    <th class="col-md-3">Delete User</th>
+                </tr>
+            </thead>
+            <tbody data-bind="foreach: users">
+                <tr>
+                    <td><a href="#" data-bind="text: data.userName, click: clickDetails, attr: {'data-t': 'user-' + data.userName}"></a></td>
+                    <td data-bind="text: data.role, attr: {'data-t': 'role-' + data.userName}"></td>
+                    <td><button class="btn btn-danger delete-button" data-bind="click: deleteIndUser, attr: {'data-t': 'delete-button-' + data.userName}"><span class="glyphicon glyphicon-remove"></span> Delete</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="left-padding">
+        <button class="btn btn-primary" data-bind="click: displayCreateUserModal" data-t="add-user-button" href="#" data-toggle="tooltip" data-original-title="Allows you to create a user through the ui" data-placement="bottom"><span class="gliphicon glyphicon-plus"></span> Add User </button>
+        <button class="btn btn-default" data-bind="click: reload" data-t='refresh-button' data-toggle="tooltip" data-original-title="Refreshes data without reloading the page. Useful if an external source alters the data" data-placement="bottom"><span class="glyphicon glyphicon-refresh"></span> Refresh</button>
+        <button class="btn btn-default" data-bind="click: postReset" data-t="reset-button" data-toggle="tooltip" data-original-title="Resets the page data back to default values" data-placement="bottom"><span class="glyphicon glyphicon-step-backward"></span>Reset</button>
+    </div>
+
+
+    <!--modal for "about" section-->
+    <div id="aboutModal" class="modal fade aboutModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-bind="attr: {'data-t': 'about-close'}">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    <h3 class="modal-title" data-bind="attr: {'data-t':'about-modal-title'}">About</h3>
+                </div>
+                <div class="modal-body">
+                    <p><div data-bind="with: displayHealthCheck" class="container about-container" id="aboutSection">
+
+                        <p><h4>Service: </h4><div data-bind="text: service" data-t=about-service></div></p>
+                        <p><h4>Version: </h4><div data-bind="text: version" data-t=about-version></div></p>
+                    </div></p>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <!--modal for "details" section-->
+    <div id="detailsModal" class="modal fade" data-bind="attr: {'data-t': 'details-modal'}">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-bind="attr: {'data-t': 'details-close'}">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    <h3 class="modal-title" data-bind="attr: {'data-t': 'details-modal-title'}">User Details</h3>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <div data-bind="with: displayDetails" class="container details-container" id="detailsSection">
+                            <div class="row">
+                                <div class="col-xs-2">
+                                    <p><h4>UserName: </h4><div data-bind="text: userName, attr: {'data-t':'details-username'}"></div></p>
+                                    <p><h4>Role: </h4><div data-bind="text: role, attr: {'data-t': 'details-role'}"></div></p>
+                                </div>
+                                <div class="col-xs-2">
+                                    <img class="img-responsive modal-image" data-bind="attr: {'src': pictureLocation, 'data-t': 'main-image'}">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div></p>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <!--modal for add user section-->
+    <div id="add-user-modal" class="modal fade add-user-modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-t="add-user-close"}>
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    <h3 class="modal-title" data-t="add-user-modal-title">Add User</h3>
+                </div>
+                <div class="modal-body">
+                    <div class="add-users-modal-input">
+                        <form>
+                            <fieldset class="form-group">
+                                <label for="add-user-name">User Name</label>
+                                <input type="text" class="form-control" data-bind="value: userNameInput"  id="add-user-name" placeholder="User Name" data-t="add-user-input">
+                            </fieldset>
+                            <fieldset class="form-group">
+                                <label for="add-role">Role</label>
+                                <input class="form-control"  data-bind="value: roleInput" type="text"  id="add-role" placeholder="Role" data-t="add-role-input">
+                            </fieldset>
+                        </form></p>
+                        <button class="btn btn-primary" data-bind="click: postUser" data-t="create-user-button" href="#"><span class="gliphicon glyphicon-plus"></span> Create User</button>
+                    </div>
+                </div></p>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+
+</body>
+</html>
+
+<!-- todo: add in a button / endpoint to reset all of the data without restarting the service -->
